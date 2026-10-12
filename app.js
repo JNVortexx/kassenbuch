@@ -482,28 +482,46 @@
     alert(added ? added+(added===1?" Buchung":" Buchungen")+" eingelesen." : "Alles war schon vorhanden.");
   }
 
-  /* Einmal-Import über #import=... – bleibt im Gerät, wird nie an einen Server geschickt. */
+  /* Einmal-Import über #import= (roh) oder #importz= (gepackt).
+     Das Fragment verlässt das Gerät nie – Browser schicken es nicht an den Server. */
+  function b64urlToBytes(s){
+    var b64=s.replace(/-/g,"+").replace(/_/g,"/");
+    while(b64.length%4) b64+="=";
+    var bin=atob(b64), bytes=new Uint8Array(bin.length);
+    for(var i=0;i<bin.length;i++) bytes[i]=bin.charCodeAt(i);
+    return bytes;
+  }
+  function gunzip(bytes){
+    if(typeof DecompressionStream==="undefined") return Promise.reject(new Error("nopack"));
+    var stream=new Blob([bytes]).stream().pipeThrough(new DecompressionStream("gzip"));
+    return new Response(stream).arrayBuffer().then(function(buf){ return new Uint8Array(buf); });
+  }
   function importFromHash(){
-    var m=/[#&]import=([A-Za-z0-9\-_]+)/.exec(location.hash||"");
-    if(!m) return;
-    try{
-      var b64=m[1].replace(/-/g,"+").replace(/_/g,"/");
-      var bin=atob(b64);
-      var bytes=new Uint8Array(bin.length);
-      for(var i=0;i<bin.length;i++) bytes[i]=bin.charCodeAt(i);
-      var d=JSON.parse(new TextDecoder().decode(bytes));
-      history.replaceState(null,"",location.pathname+location.search);
-      if(!Array.isArray(d.entries)) return;
+    var h=location.hash||"";
+    var mz=/[#&]importz=([A-Za-z0-9\-_=]+)/.exec(h);
+    var mr=mz?null:/[#&]import=([A-Za-z0-9\-_=]+)/.exec(h);
+    if(!mz && !mr) return;
+    var clean=function(){ history.replaceState(null,"",location.pathname+location.search); };
+    var bytes;
+    try{ bytes=b64urlToBytes((mz||mr)[1]); }
+    catch(e){ clean(); alert("Der Link ist unvollständig – kopier ihn noch einmal ganz."); return; }
+    (mz ? gunzip(bytes) : Promise.resolve(bytes)).then(function(raw){
+      var d=JSON.parse(new TextDecoder().decode(raw));
+      clean();
+      if(!Array.isArray(d.entries)) throw new Error("keine Buchungen im Link");
       if(confirm("Sicherung mit "+d.entries.length+" Buchungen einlesen?")) applyImport(d);
-    }catch(e){
-      history.replaceState(null,"",location.pathname+location.search);
-    }
+    }).catch(function(err){
+      clean();
+      alert(err && err.message==="nopack"
+        ? "Dieser Browser kann den Link nicht entpacken. Nimm stattdessen Menü → Daten einlesen."
+        : "Der Link konnte nicht gelesen werden: "+((err&&err.message)||err));
+    });
   }
 
   /* ---------- Start ---------- */
   load();
-  importFromHash();
   render();
+  importFromHash();
 
   if("serviceWorker" in navigator){
     window.addEventListener("load",function(){
