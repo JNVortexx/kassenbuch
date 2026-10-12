@@ -205,6 +205,11 @@ select{appearance:none;background-image:none}
 .banner span{color:var(--ink-soft)}
 .banner:active{filter:brightness(.97)}
 
+textarea{
+  font:inherit;font-size:13px;font-family:ui-monospace,Menlo,monospace;
+  background:var(--paper);color:var(--ink);border:1px solid var(--rule-strong);
+  border-radius:0;padding:10px;width:100%;resize:vertical;word-break:break-all;
+}
 .menulink{
   display:flex;flex-direction:column;gap:2px;text-decoration:none;color:inherit;
   border:1px solid var(--rule-strong);padding:13px;font-size:16px;font-weight:600;

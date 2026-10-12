@@ -110,9 +110,25 @@
     <button type="button" id="exportBtn">Daten sichern <small>Alles als Datei speichern</small></button>
     <button type="button" id="importBtn">Daten einlesen <small>Sicherung zurückholen</small></button>
     <input type="file" id="importFile" accept="application/json,.json" hidden>
+    <button type="button" id="pasteBtn">Daten einfügen <small>Code oder Link aus einer Nachricht</small></button>
     <a class="menulink" href="erinnerung.ics" id="icsLink">Monatserinnerung einrichten
       <small>Trägt einen Termin für jeden 5. in deinen Kalender</small></a>
     <p class="note" id="stats">&nbsp;</p>
+  </div>
+</dialog>
+
+<dialog id="pasteSheet" class="sheet">
+  <div class="sheethead">
+    <button type="button" class="ghost" id="pasteCancel">Abbrechen</button>
+    <strong>Daten einfügen</strong>
+    <button type="button" class="ghost strong" id="pasteOk">Einlesen</button>
+  </div>
+  <div class="sheetbody">
+    <p class="note">Füg hier den Code oder den Link aus deiner Nachricht ein. Deine bisherigen
+      Buchungen bleiben erhalten — es kommt nur dazu, was noch fehlt.</p>
+    <textarea id="pasteBox" rows="6" placeholder="Code oder Link einfügen" autocomplete="off"
+      autocapitalize="off" autocorrect="off" spellcheck="false"></textarea>
+    <p class="hint" id="pasteHint"></p>
   </div>
 </dialog>
 

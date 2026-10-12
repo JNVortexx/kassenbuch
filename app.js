@@ -482,6 +482,42 @@
     alert(added ? added+(added===1?" Buchung":" Buchungen")+" eingelesen." : "Alles war schon vorhanden.");
   }
 
+  /* Nimmt entgegen, was jemand einfügt: ganzer Link, nackter Code oder reines JSON. */
+  function parseAnyImport(text){
+    var s=(text||"").trim();
+    if(!s) return Promise.reject(new Error("leer"));
+    if(s.charAt(0)==="{"){
+      return Promise.resolve(JSON.parse(s));
+    }
+    var m=/(?:importz?=)([A-Za-z0-9\-_=]+)/.exec(s);
+    var code = m ? m[1] : s.replace(/\s+/g,"");
+    var bytes=b64urlToBytes(code);
+    var gz = bytes.length>2 && bytes[0]===0x1f && bytes[1]===0x8b;
+    return (gz ? gunzip(bytes) : Promise.resolve(bytes)).then(function(raw){
+      return JSON.parse(new TextDecoder().decode(raw));
+    });
+  }
+
+  var pasteSheet=el("pasteSheet");
+  el("pasteBtn").addEventListener("click",function(){
+    el("pasteBox").value=""; el("pasteHint").textContent="";
+    menu.close(); pasteSheet.showModal();
+    setTimeout(function(){ el("pasteBox").focus(); },60);
+  });
+  el("pasteCancel").addEventListener("click",function(){ pasteSheet.close(); });
+  el("pasteOk").addEventListener("click",function(){
+    el("pasteHint").textContent="Wird gelesen …";
+    parseAnyImport(el("pasteBox").value).then(function(d){
+      if(!Array.isArray(d.entries)) throw new Error("darin stehen keine Buchungen");
+      applyImport(d);
+      pasteSheet.close();
+    }).catch(function(err){
+      el("pasteHint").textContent = err && err.message==="nopack"
+        ? "Dieser Browser kann den Code nicht entpacken."
+        : "Das war kein gültiger Code: "+((err&&err.message)||err);
+    });
+  });
+
   /* Einmal-Import über #import= (roh) oder #importz= (gepackt).
      Das Fragment verlässt das Gerät nie – Browser schicken es nicht an den Server. */
   function b64urlToBytes(s){
