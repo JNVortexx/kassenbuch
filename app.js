@@ -158,7 +158,7 @@
     if(now.getDate()>=5 && !state.months[last]){
       box.innerHTML='<button type="button" class="banner" data-goto="'+last+'">'+
         '<b>'+MONTHS[+last.split("-")[1]-1]+' ist noch offen.</b>'+
-        '<span>Trag nach, was fehlt, und hak den Monat dann ab.</span></button>';
+        '<span>Kontoauszug abgleichen oder von Hand nachtragen – dann abhaken.</span></button>';
     } else {
       box.innerHTML="";
     }

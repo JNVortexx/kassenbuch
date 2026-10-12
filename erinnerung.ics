@@ -5,17 +5,17 @@ CALSCALE:GREGORIAN
 METHOD:PUBLISH
 BEGIN:VEVENT
 UID:monatsabschluss@kassenbuch.jnvortexx.github.io
-DTSTAMP:20261012T080000Z
+DTSTAMP:20261012T190000Z
 DTSTART:20261105T090000
 DURATION:PT15M
 RRULE:FREQ=MONTHLY;BYMONTHDAY=5
-SUMMARY:Kassenbuch nachtragen
-DESCRIPTION:Trag die Buchungen vom letzten Monat ein und hak den Monat danach ab.\n\nhttps://jnvortexx.github.io/kassenbuch/
+SUMMARY:Kontoauszug fürs Kassenbuch
+DESCRIPTION:Kontoauszug vom letzten Monat an Claude schicken – oder von Hand nachtragen. Danach den Monat abhaken.\n\nhttps://jnvortexx.github.io/kassenbuch/
 URL:https://jnvortexx.github.io/kassenbuch/
 BEGIN:VALARM
 TRIGGER:PT0S
 ACTION:DISPLAY
-DESCRIPTION:Kassenbuch nachtragen
+DESCRIPTION:Kontoauszug fürs Kassenbuch
 END:VALARM
 END:VEVENT
 END:VCALENDAR

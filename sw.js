@@ -1,5 +1,5 @@
 /* Kassenbuch – Offline-Hülle. Daten liegen im localStorage, nie im Cache. */
-var CACHE = "kassenbuch-v5";
+var CACHE = "kassenbuch-v6";
 var ASSETS = [
   "./", "./index.html", "./app.css", "./app.js",
   "./manifest.webmanifest", "./icon-192.png", "./icon-512.png", "./apple-touch-icon.png"
