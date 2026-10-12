@@ -143,11 +143,25 @@
     el("sumIn").textContent=eur.format(t.income);
     el("sumOut").textContent=eur.format(t.expense);
 
+    renderBanner();
     renderLedger(list,hasPast,carry,key);
     renderCats(list,t);
     renderYear();
     el("closed").checked=!!state.months[key];
     el("foot").textContent="Gespeichert auf diesem Gerät. Über das Menü oben rechts sicherst du die Daten.";
+  }
+
+  /* Ab dem 5. daran erinnern, dass der Vormonat noch offen ist. */
+  function renderBanner(){
+    var box=el("banner"), now=new Date();
+    var last=shiftMonth(ym(now),-1);
+    if(now.getDate()>=5 && !state.months[last]){
+      box.innerHTML='<button type="button" class="banner" data-goto="'+last+'">'+
+        '<b>'+MONTHS[+last.split("-")[1]-1]+' ist noch offen.</b>'+
+        '<span>Trag nach, was fehlt, und hak den Monat dann ab.</span></button>';
+    } else {
+      box.innerHTML="";
+    }
   }
 
   function renderLedger(list,hasPast,carry,key){
@@ -390,6 +404,12 @@
   /* ---------- Navigation ---------- */
   el("prev").addEventListener("click",function(){ state.cursor=shiftMonth(state.cursor,-1); render(); });
   el("next").addEventListener("click",function(){ state.cursor=shiftMonth(state.cursor,1); render(); });
+  el("banner").addEventListener("click",function(ev){
+    var b=ev.target.closest("[data-goto]"); if(!b) return;
+    state.cursor=b.getAttribute("data-goto");
+    render();
+    window.scrollTo({top:0,behavior:"smooth"});
+  });
   el("year").addEventListener("click",function(ev){
     var b=ev.target.closest("[data-m]"); if(!b) return;
     state.cursor=b.getAttribute("data-m"); render();

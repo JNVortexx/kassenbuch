@@ -8,6 +8,8 @@ auf den Homescreen legen und funktioniert offline.
   Buchungen ihren Namen behalten)
 - **Jahresverlauf** als Balken je Monat, mit Haken für abgeschlossene Monate
 - **Sichern / Einlesen** als JSON-Datei
+- **Erinnerung**: Hinweis in der App, sobald der Vormonat ab dem 5. noch offen ist,
+  plus `erinnerung.ics` — eine monatliche Kalender-Serie für jeden 5. um 9 Uhr
 
 ## Daten
 
@@ -30,3 +32,4 @@ python3 -m http.server 8787
 | `app.js` | Daten, Rechnen, Bedienung |
 | `sw.js` | Offline-Hülle (cached nur die App, nie die Daten) |
 | `manifest.webmanifest` | Name, Icon, Standalone-Start |
+| `erinnerung.ics` | Kalender-Serie für den Monatsabschluss |

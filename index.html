@@ -28,6 +28,8 @@
 </header>
 
 <main>
+  <div id="banner"></div>
+
   <section class="summary" aria-label="Monatsübersicht">
     <div class="stand">
       <span class="lbl">Bestand</span>
@@ -108,6 +110,8 @@
     <button type="button" id="exportBtn">Daten sichern <small>Alles als Datei speichern</small></button>
     <button type="button" id="importBtn">Daten einlesen <small>Sicherung zurückholen</small></button>
     <input type="file" id="importFile" accept="application/json,.json" hidden>
+    <a class="menulink" href="erinnerung.ics" id="icsLink">Monatserinnerung einrichten
+      <small>Trägt einen Termin für jeden 5. in deinen Kalender</small></a>
     <p class="note" id="stats">&nbsp;</p>
   </div>
 </dialog>

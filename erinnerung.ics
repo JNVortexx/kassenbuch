@@ -1,0 +1,21 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Kassenbuch//Monatserinnerung//DE
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:monatsabschluss@kassenbuch.jnvortexx.github.io
+DTSTAMP:20261012T080000Z
+DTSTART:20261105T090000
+DURATION:PT15M
+RRULE:FREQ=MONTHLY;BYMONTHDAY=5
+SUMMARY:Kassenbuch nachtragen
+DESCRIPTION:Trag die Buchungen vom letzten Monat ein und hak den Monat danach ab.\n\nhttps://jnvortexx.github.io/kassenbuch/
+URL:https://jnvortexx.github.io/kassenbuch/
+BEGIN:VALARM
+TRIGGER:PT0S
+ACTION:DISPLAY
+DESCRIPTION:Kassenbuch nachtragen
+END:VALARM
+END:VEVENT
+END:VCALENDAR
