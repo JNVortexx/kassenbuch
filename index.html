@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Kassenbuch</title>
+<meta name="description" content="Monatliches Haushaltsbuch mit Übertrag, Kategorien und Jahresverlauf.">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#141414" media="(prefers-color-scheme: dark)">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Kassenbuch">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="icon-192.png">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="bar">
+    <button id="prev" class="nav" aria-label="Vorheriger Monat">&#8249;</button>
+    <div class="month" id="curMonth">&nbsp;</div>
+    <button id="next" class="nav" aria-label="Nächster Monat">&#8250;</button>
+    <button id="menuBtn" class="nav more" aria-label="Menü">&#8942;</button>
+  </div>
+</header>
+
+<main>
+  <section class="summary" aria-label="Monatsübersicht">
+    <div class="stand">
+      <span class="lbl">Bestand</span>
+      <strong class="big num" id="sumRest">–</strong>
+      <span class="meta" id="metaRest">&nbsp;</span>
+    </div>
+    <div class="triple">
+      <div><span class="lbl">Übertrag</span><span class="num" id="sumCarry">–</span></div>
+      <div><span class="lbl">Einnahmen</span><span class="num pos" id="sumIn">–</span></div>
+      <div><span class="lbl">Ausgaben</span><span class="num neg" id="sumOut">–</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>
+      <span>Buchungen</span>
+      <label class="closer"><input type="checkbox" id="closed"> Monat abgehakt</label>
+    </h2>
+    <div class="panel" id="ledgerPanel"></div>
+  </section>
+
+  <section>
+    <h2>Wohin es ging</h2>
+    <div class="panel" id="catsPanel"></div>
+  </section>
+
+  <section>
+    <h2><span>Jahresverlauf <span id="yearLabel" class="num"></span></span>
+      <span class="legend"><span><i class="in"></i>ein</span><span><i class="ex"></i>aus</span></span></h2>
+    <div class="panel"><div class="year" id="year"></div></div>
+  </section>
+
+  <p class="foot" id="foot">&nbsp;</p>
+</main>
+
+<button class="fab" id="addBtn">Neue Buchung</button>
+
+<dialog id="entrySheet" class="sheet">
+  <form method="dialog" id="entryForm">
+    <div class="sheethead">
+      <button type="button" class="ghost" id="entryCancel">Abbrechen</button>
+      <strong id="entryTitle">Neue Buchung</strong>
+      <button type="submit" class="ghost strong" id="entrySave">Sichern</button>
+    </div>
+    <div class="sheetbody">
+      <div class="seg" role="group" aria-label="Art">
+        <button type="button" id="kExp" aria-pressed="true">Ausgabe</button>
+        <button type="button" id="kInc" aria-pressed="false">Einnahme</button>
+      </div>
+      <label class="field"><span class="lbl">Betrag</span>
+        <input id="amt" type="text" inputmode="decimal" placeholder="0,00" autocomplete="off" class="amount num">
+      </label>
+      <div class="field">
+        <div class="fieldhead"><span class="lbl">Kategorie</span>
+          <button type="button" class="linkbtn" id="catToggle" aria-expanded="false">Verwalten</button>
+        </div>
+        <select id="cat"></select>
+        <div class="catadmin" id="catAdmin" hidden></div>
+      </div>
+      <label class="field"><span class="lbl">Datum</span>
+        <input id="date" type="date">
+      </label>
+      <label class="field"><span class="lbl">Notiz</span>
+        <input id="note" type="text" placeholder="wofür?" autocomplete="off" maxlength="140">
+      </label>
+      <p class="hint" id="hint"></p>
+      <button type="button" class="danger" id="entryDelete" hidden>Buchung löschen</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="menuSheet" class="sheet">
+  <div class="sheethead">
+    <span></span><strong>Kassenbuch</strong>
+    <button type="button" class="ghost strong" id="menuClose">Fertig</button>
+  </div>
+  <div class="sheetbody menu">
+    <button type="button" id="exportBtn">Daten sichern <small>Alles als Datei speichern</small></button>
+    <button type="button" id="importBtn">Daten einlesen <small>Sicherung zurückholen</small></button>
+    <input type="file" id="importFile" accept="application/json,.json" hidden>
+    <p class="note" id="stats">&nbsp;</p>
+  </div>
+</dialog>
+
+<script src="app.js"></script>
+</body>
+</html>
