@@ -465,6 +465,19 @@
   });
 
   function applyImport(d){
+    var ersetzt=0;
+    /* Eine Sicherung darf ganze Monate ersetzen – für den Abgleich mit dem Kontoauszug. */
+    if(Array.isArray(d.replaceMonths) && d.replaceMonths.length){
+      var raus=state.entries.filter(function(e){ return d.replaceMonths.indexOf(e.month)>=0; });
+      if(raus.length){
+        var namen=d.replaceMonths.map(function(m){
+          var p=m.split("-"); return MONTHS[+p[1]-1]+" "+p[0];
+        }).join(", ");
+        if(!confirm(raus.length+" vorhandene Buchungen in "+namen+" werden durch die neuen ersetzt. Fortfahren?")) return;
+        state.entries=state.entries.filter(function(e){ return d.replaceMonths.indexOf(e.month)<0; });
+        ersetzt=raus.length;
+      }
+    }
     var known={};
     state.entries.forEach(function(e){ known[e.id]=true; });
     var added=0;
@@ -479,7 +492,9 @@
     if(d.months) Object.keys(d.months).forEach(function(k){ if(d.months[k]) state.months[k]=true; });
     if(d.cats && Array.isArray(d.cats.expense)) state.cats=d.cats;
     save(); render();
-    alert(added ? added+(added===1?" Buchung":" Buchungen")+" eingelesen." : "Alles war schon vorhanden.");
+    alert(added
+      ? added+(added===1?" Buchung":" Buchungen")+" eingelesen"+(ersetzt?", "+ersetzt+" ersetzt.":".")
+      : "Alles war schon vorhanden.");
   }
 
   /* Nimmt entgegen, was jemand einfügt: ganzer Link, nackter Code oder reines JSON. */
